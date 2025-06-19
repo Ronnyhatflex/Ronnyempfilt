@@ -1,0 +1,25 @@
+name: Auto Push from Replit
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *'  # alle 6 Stunden automatisch
+
+jobs:
+  auto-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository klonen
+        uses: actions/checkout@v3
+
+      - name: Git konfigurieren
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Neue HTML-Datei übernehmen
+        run: |
+          git pull
+          git add index.html
+          git commit -m "🔄 Automatisches Update: index.html" || echo "nichts zu committen"
+          git push
